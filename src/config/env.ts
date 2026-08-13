@@ -1,6 +1,6 @@
-import "dotenv/config";
-import z from "zod";
-import { fromError } from "zod-validation-error";
+import 'dotenv/config';
+import z from 'zod';
+import { fromError } from 'zod-validation-error';
 
 const envSchema = z
   .object({
@@ -8,7 +8,7 @@ const envSchema = z
     POSTGRES_USER: z.string().min(1),
     POSTGRES_PASSWORD: z.string().min(1),
     POSTGRES_DB: z.string().min(1),
-    POSTGRES_HOST: z.string().default("localhost"),
+    POSTGRES_HOST: z.string().default('localhost'),
     POSTGRES_PORT: z.coerce.number().default(5433),
   })
   .transform((e) => ({
@@ -22,9 +22,9 @@ const parsed = envSchema.safeParse(process.env);
 
 if (!parsed.success) {
   console.error(
-    "❌ ",
+    '❌ ',
     fromError(parsed.error, {
-      prefix: "env validation error",
+      prefix: 'env validation error',
     }),
   );
 }

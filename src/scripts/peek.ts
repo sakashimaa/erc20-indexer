@@ -1,11 +1,11 @@
-import { erc20Abi, formatUnits, parseAbiItem } from "viem";
-import { client } from "../chain/client.js";
+import { erc20Abi, formatUnits, parseAbiItem } from 'viem';
+import { client } from '../chain/client.js';
 
-const USDC = "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48" as const;
-const ZERO = "0x0000000000000000000000000000000000000000";
+const USDC = '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48' as const;
+const ZERO = '0x0000000000000000000000000000000000000000';
 
 const transferEvent = parseAbiItem(
-  "event Transfer(address indexed from, address indexed to, uint256 value)",
+  'event Transfer(address indexed from, address indexed to, uint256 value)',
 );
 
 async function main() {
@@ -13,12 +13,12 @@ async function main() {
     client.readContract({
       address: USDC,
       abi: erc20Abi,
-      functionName: "symbol",
+      functionName: 'symbol',
     }),
     client.readContract({
       address: USDC,
       abi: erc20Abi,
-      functionName: "decimals",
+      functionName: 'decimals',
     }),
   ]);
   console.log(`Token: ${symbol}, decimals: ${decimals}\n`);
@@ -36,10 +36,10 @@ async function main() {
 
   console.log(`Got ${logs.length} Transfer logs\n`);
 
-  console.log("--- raw log ---");
+  console.log('--- raw log ---');
   console.log(logs[0]);
 
-  console.log("\n--- decoded ---");
+  console.log('\n--- decoded ---');
   for (const log of logs.slice(0, 5)) {
     const { from, to, value } = log.args;
     console.log(
