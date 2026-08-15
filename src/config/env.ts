@@ -10,6 +10,13 @@ const envSchema = z
     POSTGRES_DB: z.string().min(1),
     POSTGRES_HOST: z.string().default('localhost'),
     POSTGRES_PORT: z.coerce.number().default(5433),
+    TOKEN_ADDRESS: z
+      .string()
+      .regex(/^0x[a-fA-F0-9]{40}$/)
+      .transform((v) => v.toLowerCase() as `0x${string}`),
+    START_BLOCK: z.coerce.bigint(),
+    MAX_BLOCK_RANGE: z.coerce.bigint().default(10n),
+    CONFIRMATIONS: z.coerce.bigint().default(12n),
   })
   .transform((e) => ({
     ...e,
