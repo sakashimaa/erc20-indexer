@@ -6,6 +6,7 @@ import {
   numeric,
   timestamp,
   index,
+  primaryKey,
 } from 'drizzle-orm/pg-core';
 
 export const tokens = pgTable('tokens', {
@@ -43,3 +44,19 @@ export const indexerState = pgTable('indexer_state', {
     .references(() => tokens.address),
   lastProcessedBlock: bigint({ mode: 'bigint' }).notNull(),
 });
+
+export const balances = pgTable(
+  'balances',
+  {
+    tokenAddress: text()
+      .notNull()
+      .references(() => tokens.address),
+    holderAddress: text().notNull(),
+    balance: numeric({ precision: 78, scale: 0 }).notNull().default('0'),
+    updatedAtBlock: bigint({ mode: 'bigint' }).notNull(),
+  },
+  (t) => [
+    primaryKey({ columns: [t.tokenAddress, t.holderAddress] }),
+    index('balances_top_idx').on(t.tokenAddress, t.balance.desc()),
+  ],
+);
