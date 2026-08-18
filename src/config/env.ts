@@ -4,6 +4,8 @@ import { fromError } from 'zod-validation-error';
 
 const envSchema = z
   .object({
+    NODE_ENV: z.enum(['production', 'development', 'test']).default('development'),
+    LOG_LEVEL: z.enum(['debug', 'info', 'warn', 'error']).default('info'),
     RPC_URL: z.url(),
     POSTGRES_USER: z.string().min(1),
     POSTGRES_PASSWORD: z.string().min(1),
@@ -17,6 +19,7 @@ const envSchema = z
     START_BLOCK: z.coerce.bigint(),
     MAX_BLOCK_RANGE: z.coerce.bigint().default(10n),
     CONFIRMATIONS: z.coerce.bigint().default(12n),
+    HTTP_PORT: z.coerce.number().positive().default(3000),
   })
   .transform((e) => ({
     ...e,
