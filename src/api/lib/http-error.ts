@@ -9,6 +9,12 @@ export class HttpError extends Error {
   }
 }
 
+export class TooManyRequestsError extends HttpError {
+  constructor() {
+    super(429, 'too many requests, try again later', 'too_many_requests');
+  }
+}
+
 export class NotFoundError extends HttpError {
   constructor(message: string) {
     super(404, message, 'not_found');

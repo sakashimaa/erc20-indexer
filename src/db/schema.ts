@@ -20,6 +20,7 @@ export const transfers = pgTable(
   'transfers',
   {
     id: text().primaryKey(),
+    txHash: text().notNull(),
     tokenAddress: text()
       .notNull()
       .references(() => tokens.address),
@@ -32,7 +33,7 @@ export const transfers = pgTable(
     blockTimestamp: timestamp({ withTimezone: true }).notNull(),
   },
   (t) => [
-    index('transfers_token_block_idx').on(t.tokenAddress, t.blockNumber),
+    index('transfers_token_block_log_idx').on(t.tokenAddress, t.blockNumber, t.logIndex),
     index('transfers_from_idx').on(t.fromAddress),
     index('transfers_to_idx').on(t.toAddress),
   ],
@@ -57,6 +58,10 @@ export const balances = pgTable(
   },
   (t) => [
     primaryKey({ columns: [t.tokenAddress, t.holderAddress] }),
-    index('balances_top_idx').on(t.tokenAddress, t.balance.desc()),
+    index('balances_top_holder_idx').on(
+      t.tokenAddress,
+      t.balance.desc(),
+      t.holderAddress,
+    ),
   ],
 );

@@ -1,11 +1,14 @@
 import express, { Router } from 'express';
 import { router as tokensRouter } from './routes/tokens';
+import { router as transfersRouter } from './routes/transfers';
+import { router as holdersRouter } from './routes/holders';
 import { pinoHttp } from 'pino-http';
 import { logger as appLogger } from './lib/logger';
 import { HttpError, NotFoundError } from './lib/http-error';
 import type { Request, Response, NextFunction } from 'express';
 import { ZodError } from 'zod';
 import { fromError } from 'zod-validation-error';
+import { apiLimiter } from './middleware/rate-limit';
 
 const app = express();
 app.use(express.json());
@@ -33,7 +36,11 @@ v1Router.get('/health', (req: Request, res: Response) => res.json({ status: 'ok'
 app.use('/api', apiRouter);
 apiRouter.use('/v1', v1Router);
 
+v1Router.use(apiLimiter);
+
 v1Router.use('/tokens', tokensRouter);
+v1Router.use('/transfers', transfersRouter);
+v1Router.use('/holders', holdersRouter);
 
 app.use((req: Request, res: Response, next: NextFunction) => {
   next(new NotFoundError(`route ${req.method} ${req.path} not found`));
@@ -46,7 +53,9 @@ app.use((err: unknown, req: Request, res: Response, _next: NextFunction) => {
 
   if (err instanceof HttpError) {
     req.log.warn({ err, status: err.status }, 'http error');
-    return res.status(err.status).json({ status: 'error', message: err.message });
+    return res
+      .status(err.status)
+      .json({ status: 'error', message: err.message, code: err.code });
   }
 
   req.log.error({ err }, 'unhandled error');

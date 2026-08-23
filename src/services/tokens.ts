@@ -1,6 +1,7 @@
-import { and, count, eq, gt, min } from 'drizzle-orm';
+import { and, count, eq, gt } from 'drizzle-orm';
 import { db } from '../db';
 import { balances, indexerState, tokens, transfers } from '../db/schema';
+import env from '../config/env';
 
 export interface TokenMetadata {
   address: string;
@@ -28,34 +29,29 @@ export async function getTokenMetadata(token: string): Promise<TokenMetadata | n
     return null;
   }
 
-  const [[lastProcessedBlock], [transfersCount], [holderCount], [fromBlock]] =
-    await Promise.all([
-      db
-        .select({ lastProcessedBlock: indexerState.lastProcessedBlock })
-        .from(indexerState)
-        .where(eq(indexerState.tokenAddress, tokResult.address)),
-      db
-        .select({ count: count() })
-        .from(transfers)
-        .where(eq(transfers.tokenAddress, tokResult.address)),
-      db
-        .select({ count: count() })
-        .from(balances)
-        .where(
-          and(eq(balances.tokenAddress, tokResult.address), gt(balances.balance, '0')),
-        ),
-      db
-        .select({ fromBlock: min(transfers.blockNumber) })
-        .from(transfers)
-        .where(eq(transfers.tokenAddress, tokResult.address)),
-    ]);
+  const [[lastProcessedBlock], [transfersCount], [holderCount]] = await Promise.all([
+    db
+      .select({ lastProcessedBlock: indexerState.lastProcessedBlock })
+      .from(indexerState)
+      .where(eq(indexerState.tokenAddress, tokResult.address)),
+    db
+      .select({ count: count() })
+      .from(transfers)
+      .where(eq(transfers.tokenAddress, tokResult.address)),
+    db
+      .select({ count: count() })
+      .from(balances)
+      .where(
+        and(eq(balances.tokenAddress, tokResult.address), gt(balances.balance, '0')),
+      ),
+  ]);
 
   return {
     address: tokResult.address,
     name: tokResult.name,
     symbol: tokResult.symbol,
     decimals: tokResult.decimals,
-    indexedFromBlock: fromBlock?.fromBlock ?? 0n,
+    indexedFromBlock: env.START_BLOCK,
     lastProcessedBlock: lastProcessedBlock?.lastProcessedBlock ?? null,
     transferCount: transfersCount?.count ?? 0,
     holderCount: holderCount?.count ?? 0,
