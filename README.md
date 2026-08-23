@@ -84,6 +84,8 @@ GraphQL решает over-fetching и waterfall-запросы и являетс
 стандартом в web3 (The Graph отдаёт данные через GraphQL). N+1 в резолверах
 решается через DataLoader.
 
+**Почему нет аутентификации** Данные публичны - их можно извлечь из истории токена, поэтоу защищать тут нечего. Вместо этого внедрен `rate-limiting` для ограничения спама
+
 ## Стек
 
 TypeScript · viem · PostgreSQL · Drizzle ORM · Express · GraphQL · Zod ·

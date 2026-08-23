@@ -1,6 +1,6 @@
 {
-  "id": "b94d8821-59a3-4b40-8eee-f5fd39977245",
-  "prevId": "d2fcec1e-bdf7-411d-a998-55ff3fbe0b03",
+  "id": "ef282938-efcf-48e6-8e12-6bd0024f4cd4",
+  "prevId": "b94d8821-59a3-4b40-8eee-f5fd39977245",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -35,8 +35,8 @@
         }
       },
       "indexes": {
-        "balances_top_idx": {
-          "name": "balances_top_idx",
+        "balances_top_holder_idx": {
+          "name": "balances_top_holder_idx",
           "columns": [
             {
               "expression": "token_address",
@@ -48,6 +48,12 @@
               "expression": "balance",
               "isExpression": false,
               "asc": false,
+              "nulls": "last"
+            },
+            {
+              "expression": "holder_address",
+              "isExpression": false,
+              "asc": true,
               "nulls": "last"
             }
           ],

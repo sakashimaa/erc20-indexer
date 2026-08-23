@@ -1,9 +1,91 @@
 {
-  "id": "af8b6e67-528a-433a-86ca-cade69799bd4",
+  "id": "d2fcec1e-bdf7-411d-a998-55ff3fbe0b03",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
+    "public.balances": {
+      "name": "balances",
+      "schema": "",
+      "columns": {
+        "token_address": {
+          "name": "token_address",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "holder_address": {
+          "name": "holder_address",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "balance": {
+          "name": "balance",
+          "type": "numeric(78, 0)",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'0'"
+        },
+        "updated_at_block": {
+          "name": "updated_at_block",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {
+        "balances_top_idx": {
+          "name": "balances_top_idx",
+          "columns": [
+            {
+              "expression": "token_address",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "balance",
+              "isExpression": false,
+              "asc": false,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "balances_token_address_tokens_address_fk": {
+          "name": "balances_token_address_tokens_address_fk",
+          "tableFrom": "balances",
+          "tableTo": "tokens",
+          "columnsFrom": [
+            "token_address"
+          ],
+          "columnsTo": [
+            "address"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "balances_token_address_holder_address_pk": {
+          "name": "balances_token_address_holder_address_pk",
+          "columns": [
+            "token_address",
+            "holder_address"
+          ]
+        }
+      },
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
     "public.indexer_state": {
       "name": "indexer_state",
       "schema": "",
@@ -88,6 +170,12 @@
           "name": "id",
           "type": "text",
           "primaryKey": true,
+          "notNull": true
+        },
+        "tx_hash": {
+          "name": "tx_hash",
+          "type": "text",
+          "primaryKey": false,
           "notNull": true
         },
         "token_address": {
