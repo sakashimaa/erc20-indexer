@@ -1,106 +1,92 @@
 # ERC20-Indexer
 
-Индексер ERC-20 переводов: читает `Transfer` - события USDC из сети Ethereum, складывает их в PostgreSQL и отдает REST / GraphQL API с агрегациями, которых блокчейн-нода нам дать не сможет.
+An ERC-20 transfer indexer: it reads USDC `Transfer` events from Ethereum, stores them in `PostgreSQL`, and exposes a `REST` / `GraphQL` API with the aggregations a node cannot provide.
 
-## Проблема
+## Problem
 
-Ethereum-нода умеет отвечать на 2 вопроса:
+An Ethereum node can only answer two kinds of questions:
 
-- Какой баланс у адреса X **сейчас** - вызов `balanceOf` в контракте
-- Дай логи по контракту за блоки N..M - `eth_getLogs`
+- What is address X's balance right now — a `balanceOf` call on the contract
+- Give me the contract's logs for blocks N..M — `eth_getLogs`
 
-Она не умеет отвечать на вопросы, требующие агрегации:
+It cannot answer anything that requires aggregation:
 
-- топ-100 держателей токена
-- история баланса адреса по дням
-- объем переводов за период, число уникальных отправителей
-- все переводы больше N токенов
+- Top 100 token holders
+- Balance history by day
+- Transfer volume over a date range, number of unique senders
+- All transfers larger than N tokens
 
-Последний пункт при этом невозможен принципиально так как indexed в `Transfer` event являются только `from` и `to`. Сумма перевода не попадает в topic и по ней невозможна фильтрация в принципе.
+The last one is impossible at the node level because only `from` and `to` are indexed in the `Transfer` event. The amount is not a topic, so it cannot be filtered on.
 
-Такие запросы решаются внешним индексером: выкачать события, разложить в реляционную модель, отдавать по индексам. Этим занимаются такие сервисы как The Graph, Dune, Covalent и Etherscan - этот проект решает такую же задачу в миниатюре
+Indexers exist for exactly this: load the events, put them into a relational model, serve them through indexes. `The Graph`, `Dune`, `Covalent` and similar services do the same thing at a much larger scale. This project is a small version of that idea.
 
-## Что такое ERC-20 и почему события источник данных
+## What ERC-20 is, and why events are the data source
 
-ETH валюта нативная и ее баланс ведет сам протокол. USDC, USDT, DAI протоколу неизвестны, каждый такой токен это отдельный смарт контракт, внутри которого `mapping(address => uint256) balances`. Баланс кошелька - это запись в storage контракта токена.
+ETH is the native currency, and the protocol itself tracks its balances. USDC, USDT and DAI are unknown to the protocol — each of them is a separate smart contract holding a `mapping(address => uint256) balances`. A wallet's balance is a record in that contract's storage.
 
-ERC-20 - стандарт интерфейса (`transfer`, `balanceOf`, `approve`, ...) благодаря которому кошельки и биржи работают с любым токеном, не зная его внутреннего устройства. Часть стандарта - событие:
+ERC-20 is an interface standard (`transfer`, `balanceOf`, `approve`, ...) that lets wallets and exchanges work with any token without knowing its internals. Part of the standard is an event:
 
 ```solidity
 event Transfer(address indexed from, address indexed to, uint256 value);
 ```
 
-События никак не влияют на консенсус. Они существуют как раз для таких потребителей как этот проект, чтобы мы могли узнать что произошлою
+Events have no effect on consensus. They exist precisely for consumers like this project — so that we can find out what happened.
 
-## Модель данных Ethereum
+## How it works
 
-Ethereum использует account/state модель. Состояние хранится в Merkle Partitia Trie, корень которого коммитится в каждый блок.
+```
+Ethereum ──> Alchemy RPC ──> Indexer ──> PostgreSQL ──> Service layer ──┬──> REST
+             (JSON-RPC)      (viem)      (Drizzle)                      └──> GraphQL
+```
 
-## Как это работает
+No subscriptions, no push model: the indexer polls for logs in block ranges and advances the `last_processed_block` cursor in the database.
 
-Alchemy RPC -> getLogs -> Indexer -> PostgreSQL -> Service -> REST (Ethereum) (Viem) (Drizzle) -> GraphQL
+The loop, roughly:
 
-Никаких подписок и push моделей: indexer в цикле запрашивает логи диапазонами блоков и двигает курсор `last_processed_block` в БД.
+- Get the current chain height (`eth_blockNumber`)
+- Request `Transfer` logs for a range starting at the cursor, staying `CONFIRMATIONS` blocks behind the head
+- Decode them, fold them into balances, and write them together with the new cursor value in a single database transaction
+- Repeat
 
-Примерный цикл:
+The cursor must move in the same transaction as the data, so that a crash makes the indexer redo work rather than leave a gap. The `txHash-logIndex` primary key makes processing idempotent: if the key already exists, the log has been handled and we move on.
 
-- Узнать текущую высоту цепи (`eth_blockNumber`)
-- Запросить логи `Transfer` за диапазон от курсора с отступом `CONFIRMATIONS` от головы.
-- Декодировать, свернуть в балансы, записать вместе с новым значением курсора одной транзакцией в БД
-- Повтор
+## Technical decisions
 
-Курсор перемещается обязательно в той же транзакции что и данные, чтобы в случае падения индексер начал заново а не оставил дыру в данных. Первичный ключ `txHash-logIndex` делает обработку идемпотентной (если такой ключ уже есть значит обработали, идем дальше)
+**Why an external RPC provider.** Ethereum has no single API — there are nodes with a JSON-RPC interface. Running your own means ~2 TB of SSD and a long sync. An archive node, which is required for state queries against historical blocks, costs even more. Alchemy provides managed access.
 
-## Технические решения
+The trade-off is provider limits: on the free tier `eth_getLogs` is capped at a 10-block range. The batch size is therefore configurable, and on a "range too large" error it is halved and retried, then gradually restored after successful requests.
 
-**Почему внешний RPC-провайдер.** Единого API у Ethereum нет, есть нод с JSON-RPC интерфейсом. Своя нода — это ~2 ТБ SSD и длительная
-синхронизация. archive-нода, нужная для запросов состояния на исторических
-блоках, ещё дороже. Alchemy предоставляет managed-доступ.
+**Why viem instead of hand-rolled JSON-RPC.** A node accepts and returns hex: addresses zero-padded to 32 bytes, ABI-encoded arguments, keccak256 hashes of event signatures. viem handles request encoding and response decoding, and more importantly **infers types from the ABI**: `log.args.value` comes out as `bigint` and `log.args.from` as `` `0x${string}` ``, with no hand-written interfaces.
 
-Обратная сторона - лимиты провайдера: на бесплатном тарифе `eth_getLogs`
-ограничен диапазоном в 10 блоков. Поэтому размер батча вынесен в конфиг,
-а при ошибке «range too large» уменьшается вдвое с ретраем и постепенно
-восстанавливается после успешных запросов.
+**Why `numeric(78, 0)`.** `uint256` values run up to 78 decimal digits and fit neither in a JS `Number` (~2^53) nor in a Postgres `bigint` (int64). In code it is `bigint`; in the database, `numeric(78, 0)`.
 
-**Почему viem, а не ручной JSON-RPC.** Нода принимает и возвращает hex:
-адреса, дополненные нулями до 32 байт, ABI-кодированные аргументы,
-keccak256-хеши сигнатур событий. viem берёт на себя кодирование запросов
-и декодирование ответов, а главное — **выводит типы из ABI**: `log.args.value`
-получает тип `bigint`, а `log.args.from` — `` `0x${string}` `` без ручного
-описания интерфейсов.
+**Why amounts are stored in base units.** `decimals` is a display instruction, not a sign of a fractional type: USDC has `decimals = 6`, so `1000000` means 1 USDC. The raw integer goes into the database, `decimals` lives in the token table, and the conversion happens only at the API layer.
 
-**Почему `numeric(78, 0)`.** Значения `uint256` доходят до 78 десятичных
-знаков и не помещаются ни в JS `Number` (~2^53), ни в Postgres `bigint`
-(int64). В коде — `bigint`, в БД — `numeric(78, 0)`.
+**Why both REST and GraphQL.** Both APIs are thin adapters over a shared service layer. REST is convenient for simple queries and HTTP caching; GraphQL solves over-fetching and waterfall requests and is the de facto standard in web3 (The Graph serves its data over GraphQL). N+1 in resolvers is handled with DataLoader.
 
-**Почему суммы хранятся в минимальных единицах.** `decimals` — это
-инструкция отображения, а не признак дробного типа: у USDC `decimals = 6`,
-и `1000000` означает 1 USDC. В БД пишется сырое целое, `decimals` хранится
-в таблице токена и применяется только на уровне API.
+## Known limitations
 
-**Почему REST и GraphQL одновременно.** Оба API — тонкие адаптеры над общим
-сервисным слоем. REST удобен для простых запросов и HTTP-кеширования,
-GraphQL решает over-fetching и waterfall-запросы и является отраслевым
-стандартом в web3 (The Graph отдаёт данные через GraphQL). N+1 в резолверах
-решается через DataLoader.
+- Balances are relative, counted from `env.START_BLOCK` - negative balances are possible because of it. For example now from 12203 rows only 3751 have positive balance, which is 31%
+- "Top holders" are in reality just "top for net inflow from block N"
+- `COUNT(*)` on each `GET /holders` `GET /tokens` requests are high compute-cost SQL, in future on larger datasets it will slow API. Will be fixed using 30 secs TTL cache or other solution
+- Rate limiting with in-process store. In future will be replaced by Redis or PostgreSQL based limiters
 
-**Почему нет аутентификации** Данные публичны - их можно извлечь из истории токена, поэтоу защищать тут нечего. Вместо этого внедрен `rate-limiting` для ограничения спама
+## Stack
 
-## Стек
+TypeScript · viem · PostgreSQL · Drizzle ORM · Express · GraphQL · Zod · Vitest · Docker Compose · GitHub Actions
 
-TypeScript · viem · PostgreSQL · Drizzle ORM · Express · GraphQL · Zod ·
-Vitest · Docker Compose · GitHub Actions
+## Status
 
-## Статус
-
-- [x] Чтение и декодирование логов через viem
-- [ ] Схема БД и миграции (Drizzle)
-- [ ] Backfill с курсором и адаптивным размером батча
-- [ ] Агрегация балансов
-- [ ] REST API (Express + Zod)
-- [ ] Тесты (Vitest + testcontainers)
-- [ ] Docker Compose, CI
+- [x] Reading and decoding logs with viem
+- [x] Database schema and migrations (Drizzle)
+- [x] Backfill with a cursor and adaptive batch size
+- [x] Balance aggregation
+- [x] Balance reconciliation from `transfers` via SQL aggregation
+- [x] REST API (Express + Zod)
+- [x] Docker Compose
+- [ ] Tests (Vitest + testcontainers)
+- [ ] CI
 - [ ] GraphQL
-- [ ] Realtime-режим
-- [ ] Обработка реоргов
-- [ ] Reconciliation балансов через `multicall`
+- [ ] Realtime mode
+- [ ] Reorg handling
+- [ ] Absolute balances via a `multicall` snapshot at `START_BLOCK`
