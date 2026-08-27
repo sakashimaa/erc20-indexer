@@ -4,11 +4,17 @@ import type { transferEvent } from './abi';
 export type TransferLog = Log<bigint, number, false, typeof transferEvent, true>;
 
 export function toTransferRow(log: TransferLog, tokenAddress: string) {
-  if (log.blockNumber === null || log.transactionHash === null || log.logIndex === null) {
-    throw new Error('pending lock received - no block info');
+  const missing = [
+    log.blockNumber == null && 'blockNumber',
+    log.transactionHash == null && 'transactionHash',
+    log.logIndex == null && 'logIndex',
+  ].filter(Boolean);
+
+  if (missing.length > 0) {
+    throw new Error(`pending log received - missing ${missing.join(', ')}`);
   }
 
-  if (log.blockTimestamp === null) {
+  if (log.blockTimestamp == null) {
     throw new Error(
       `RPC did not return blockTimestamp for block ${log.blockNumber}. ` +
         `Fallback to eth_getBlockByNumber`,
