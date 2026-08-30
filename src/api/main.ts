@@ -1,10 +1,18 @@
 import env from '../config/env';
 import { queryClient } from '../db';
-import { app as expressApp } from './app';
+import { app as expressApp, mountErrorHandlers } from './app';
+import { mountGraphql } from './graphql/server';
 import logger from './lib/logger';
+import http from 'http';
 
-const server = expressApp.listen(env.HTTP_PORT, () => {
-  logger.info(`server is running on port ${env.HTTP_PORT}`);
+const server = http.createServer(expressApp);
+
+await mountGraphql(expressApp, server);
+mountErrorHandlers(expressApp);
+
+server.on('error', (err) => {
+  logger.error({ err }, 'server failed to start');
+  process.exit(1);
 });
 
 for (const signal of ['SIGTERM', 'SIGINT'] as const) {
@@ -19,7 +27,6 @@ for (const signal of ['SIGTERM', 'SIGINT'] as const) {
   });
 }
 
-server.on('error', (err) => {
-  logger.error({ err }, 'server failed to start');
-  process.exit(1);
+server.listen(env.HTTP_PORT, () => {
+  logger.info(`listening on ${env.HTTP_PORT}`);
 });

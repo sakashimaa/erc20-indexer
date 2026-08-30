@@ -21,7 +21,7 @@ export function decodeCursor(c: string): Cursor {
       logIndex: r.l,
     };
   } catch (e) {
-    logger.warn({ e }, 'invalid cursor format passed');
+    logger.warn({ err: e }, 'invalid cursor format passed');
     throw new BadRequestError('invalid cursor format');
   }
 }
