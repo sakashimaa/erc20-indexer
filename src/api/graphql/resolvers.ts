@@ -6,6 +6,7 @@ import {
 } from '../../services/holders';
 import { listTransfers, type Transfer } from '../../services/transfers';
 import { decodeCursor, encodeCursor } from '../lib/cursor';
+import { type GraphQLContext } from './context';
 
 export const resolvers = {
   Query: {
@@ -38,14 +39,11 @@ export const resolvers = {
     holders: async (
       _parent: unknown,
       args: { limit: number; page: number; token: string },
-    ) =>
-      (
-        await holdersList({
-          limit: args.limit,
-          page: args.page,
-          token: args.token.toLowerCase(),
-        })
-      ).data,
+    ) => {
+      const token = args.token.toLowerCase();
+      const { data } = await holdersList({ token, limit: args.limit, page: args.page });
+      return data.map((row) => ({ ...row, tokenAddress: token }));
+    },
     holder: async (_parent: unknown, args: { address: string; token: string }) =>
       getHolder({ holder: args.address, token: args.token.toLowerCase() }),
   },
@@ -61,8 +59,33 @@ export const resolvers = {
     indexedFromBlock: (h: Holder) => h.indexedFromBlock?.toString() ?? null,
     lastProcessedBlock: (h: Holder) => h.lastProcessedBlock?.toString() ?? null,
   },
+  HolderTransfer: {
+    blockNumber: (t: Transfer) => t.blockNumber.toString(),
+    blockTimestamp: (t: Transfer) => t.blockTimestamp.toISOString(),
+    transactionHash: (t: Transfer) => t.txHash,
+  },
   HolderList: {
     address: (h: HoldersList) => h.holderAddress,
     updatedAtBlock: (h: HoldersList) => h.updatedAtBlock?.toString() ?? null,
+
+    transfers: async (
+      holder: HoldersList & { tokenAddress: string },
+      args: { limit: number },
+      ctx: GraphQLContext,
+    ) => {
+      const rows = await ctx
+        .transfersByHolder(holder.tokenAddress, args.limit)
+        .load(holder.holderAddress);
+
+      return rows.slice(0, args.limit).map((row) => ({
+        ...row,
+        direction:
+          row.fromAddress === row.toAddress
+            ? 'SELF'
+            : row.fromAddress === holder.holderAddress
+              ? 'OUT'
+              : 'IN',
+      }));
+    },
   },
 };

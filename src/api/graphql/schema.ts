@@ -1,4 +1,10 @@
 export const typeDefs = /* GraphQL */ `
+  enum TransferDirection {
+    IN
+    OUT
+    SELF
+  }
+
   type Transfer {
     id: ID!
     blockNumber: String!
@@ -10,10 +16,23 @@ export const typeDefs = /* GraphQL */ `
     blockTimestamp: String!
   }
 
+  type HolderTransfer {
+    id: ID!
+    blockNumber: String!
+    logIndex: Int!
+    transactionHash: String!
+    fromAddress: String!
+    toAddress: String!
+    value: String!
+    blockTimestamp: String!
+    direction: TransferDirection!
+  }
+
   type HolderList {
     address: String!
     balance: String!
     updatedAtBlock: String
+    transfers(limit: Int = 5): [HolderTransfer!]!
   }
 
   type Holder {
