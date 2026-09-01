@@ -1,4 +1,4 @@
-import express, { Router } from 'express';
+import express, { Router, type Express } from 'express';
 import { router as tokensRouter } from './routes/tokens';
 import { router as transfersRouter } from './routes/transfers';
 import { router as holdersRouter } from './routes/holders';
@@ -42,25 +42,25 @@ v1Router.use('/tokens', tokensRouter);
 v1Router.use('/transfers', transfersRouter);
 v1Router.use('/holders', holdersRouter);
 
-app.use((req: Request, res: Response, next: NextFunction) => {
-  next(new NotFoundError(`route ${req.method} ${req.path} not found`));
-});
+export function mountErrorHandlers(app: Express) {
+  app.use((req, _res, next) =>
+    next(new NotFoundError(`route ${req.method} ${req.path} not found`)),
+  );
+  app.use((err: unknown, req: Request, res: Response, _next: NextFunction) => {
+    if (err instanceof ZodError) {
+      return res.status(400).json({ status: 'error', message: fromError(err).message });
+    }
 
-app.use((err: unknown, req: Request, res: Response, _next: NextFunction) => {
-  if (err instanceof ZodError) {
-    return res.status(400).json({ status: 'error', message: fromError(err).message });
-  }
+    if (err instanceof HttpError) {
+      req.log.warn({ err, status: err.status }, 'http error');
+      return res
+        .status(err.status)
+        .json({ status: 'error', message: err.message, code: err.code });
+    }
 
-  if (err instanceof HttpError) {
-    req.log.warn({ err, status: err.status }, 'http error');
-    return res
-      .status(err.status)
-      .json({ status: 'error', message: err.message, code: err.code });
-  }
-
-  req.log.error({ err }, 'unhandled error');
-  return res.status(500).json({ status: 'error', message: 'unknown error' });
-});
+    req.log.error({ err }, 'unhandled error');
+    return res.status(500).json({ status: 'error', message: 'unknown error' });
+  });
+}
 
 export { app };
-export default app;

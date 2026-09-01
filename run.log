@@ -1,0 +1,221 @@
+[2026-08-31 22:06:19.915 +0800] [32mINFO[39m: [36mlistening on 3000[39m
+[2026-08-31 22:07:15.963 +0800] [32mINFO[39m: [36mGET / - success (200)[39m
+    [35mreq[39m: {
+      "id": 1,
+      "method": "GET",
+      "url": "/graphql",
+      "query": {},
+      "params": {},
+      "headers": {
+        "host": "localhost:3000",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64; rv:154.0) Gecko/20100101 Firefox/154.0",
+        "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+        "accept-language": "en-US,en;q=0.9",
+        "accept-encoding": "gzip, deflate, br, zstd",
+        "sec-gpc": "1",
+        "connection": "keep-alive",
+        "cookie": "cw_conversation=eyJhbGciOiJIUzI1NiJ9.eyJzb3VyY2VfaWQiOiJkM2I2NzAwYS0wNzczLTQ0NjgtYmU1Zi00N2FmZWNkMjM1ZTkiLCJpbmJveF9pZCI6OSwiZXhwIjoxODAzMzU5Mjc1LCJpYXQiOjE3ODc4MDcyNzV9.TgPViQNRCVVf16ZYtvO0HC8-4wj4WOq8IjZj9-HKy88; lang=ru; pma_lang=en; auth.strategy=local; phpMyAdmin=53082bb499c9b776f0253de374f30497",
+        "upgrade-insecure-requests": "1",
+        "sec-fetch-dest": "document",
+        "sec-fetch-mode": "navigate",
+        "sec-fetch-site": "none",
+        "priority": "u=0, i"
+      },
+      "remoteAddress": "::ffff:127.0.0.1",
+      "remotePort": 56376
+    }
+    [35mres[39m: {
+      "statusCode": 200,
+      "headers": {
+        "x-powered-by": "Express",
+        "access-control-allow-origin": "*",
+        "content-type": "text/html; charset=utf-8",
+        "content-length": "3522",
+        "etag": "W/\"dc2-ev1uR5XwZLbEVcm/KnV8Yzx0D08\""
+      }
+    }
+    [35mresponseTime[39m: 17
+[2026-08-31 22:07:16.962 +0800] [33mWARN[39m: [36mhttp error[39m
+    [35mreq[39m: {
+      "id": 2,
+      "method": "GET",
+      "url": "/favicon.ico",
+      "query": {},
+      "params": {},
+      "headers": {
+        "host": "localhost:3000",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64; rv:154.0) Gecko/20100101 Firefox/154.0",
+        "accept": "*/*",
+        "accept-language": "en-US,en;q=0.9",
+        "accept-encoding": "gzip, deflate, br, zstd",
+        "referer": "http://localhost:3000/graphql",
+        "sec-gpc": "1",
+        "connection": "keep-alive",
+        "cookie": "cw_conversation=eyJhbGciOiJIUzI1NiJ9.eyJzb3VyY2VfaWQiOiJkM2I2NzAwYS0wNzczLTQ0NjgtYmU1Zi00N2FmZWNkMjM1ZTkiLCJpbmJveF9pZCI6OSwiZXhwIjoxODAzMzU5Mjc1LCJpYXQiOjE3ODc4MDcyNzV9.TgPViQNRCVVf16ZYtvO0HC8-4wj4WOq8IjZj9-HKy88; lang=ru; pma_lang=en; auth.strategy=local; phpMyAdmin=53082bb499c9b776f0253de374f30497",
+        "sec-fetch-dest": "empty",
+        "sec-fetch-mode": "cors",
+        "sec-fetch-site": "same-origin",
+        "priority": "u=4"
+      },
+      "remoteAddress": "::ffff:127.0.0.1",
+      "remotePort": 56376
+    }
+    [35mstatus[39m: 404
+    err: {
+      "type": "NotFoundError",
+      "message": "route GET /favicon.ico not found",
+      "stack":
+          NotFoundError: route GET /favicon.ico not found
+              at <anonymous> (/home/yoko/erc20-indexer/src/api/app.ts:47:10)
+              at Layer.handleRequest (/home/yoko/erc20-indexer/node_modules/router/lib/layer.js:152:17)
+              at trimPrefix (/home/yoko/erc20-indexer/node_modules/router/index.js:342:13)
+              at /home/yoko/erc20-indexer/node_modules/router/index.js:297:9
+              at processParams (/home/yoko/erc20-indexer/node_modules/router/index.js:582:12)
+              at next (/home/yoko/erc20-indexer/node_modules/router/index.js:291:5)
+              at loggingMiddleware (/home/yoko/erc20-indexer/node_modules/pino-http/logger.js:206:7)
+              at result (/home/yoko/erc20-indexer/node_modules/pino-http/logger.js:90:12)
+              at Layer.handleRequest (/home/yoko/erc20-indexer/node_modules/router/lib/layer.js:152:17)
+              at trimPrefix (/home/yoko/erc20-indexer/node_modules/router/index.js:342:13)
+      "status": 404,
+      "code": "not_found",
+      "name": "NotFoundError"
+    }
+[2026-08-31 22:07:16.966 +0800] [33mWARN[39m: [36mGET /favicon.ico - success (404)[39m
+    [35mreq[39m: {
+      "id": 2,
+      "method": "GET",
+      "url": "/favicon.ico",
+      "query": {},
+      "params": {},
+      "headers": {
+        "host": "localhost:3000",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64; rv:154.0) Gecko/20100101 Firefox/154.0",
+        "accept": "*/*",
+        "accept-language": "en-US,en;q=0.9",
+        "accept-encoding": "gzip, deflate, br, zstd",
+        "referer": "http://localhost:3000/graphql",
+        "sec-gpc": "1",
+        "connection": "keep-alive",
+        "cookie": "cw_conversation=eyJhbGciOiJIUzI1NiJ9.eyJzb3VyY2VfaWQiOiJkM2I2NzAwYS0wNzczLTQ0NjgtYmU1Zi00N2FmZWNkMjM1ZTkiLCJpbmJveF9pZCI6OSwiZXhwIjoxODAzMzU5Mjc1LCJpYXQiOjE3ODc4MDcyNzV9.TgPViQNRCVVf16ZYtvO0HC8-4wj4WOq8IjZj9-HKy88; lang=ru; pma_lang=en; auth.strategy=local; phpMyAdmin=53082bb499c9b776f0253de374f30497",
+        "sec-fetch-dest": "empty",
+        "sec-fetch-mode": "cors",
+        "sec-fetch-site": "same-origin",
+        "priority": "u=4"
+      },
+      "remoteAddress": "::ffff:127.0.0.1",
+      "remotePort": 56376
+    }
+    [35mres[39m: {
+      "statusCode": 404,
+      "headers": {
+        "x-powered-by": "Express",
+        "content-type": "application/json; charset=utf-8",
+        "content-length": "82",
+        "etag": "W/\"52-EI47G+N53Hce07vrf5g84meT1mY\""
+      }
+    }
+    [35mresponseTime[39m: 6
+[2026-08-31 22:07:21.386 +0800] [32mINFO[39m: [36mPOST / - success (200)[39m
+    [35mreq[39m: {
+      "id": 3,
+      "method": "POST",
+      "url": "/graphql",
+      "query": {},
+      "params": {},
+      "headers": {
+        "host": "localhost:3000",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64; rv:154.0) Gecko/20100101 Firefox/154.0",
+        "accept": "*/*",
+        "accept-language": "en-US,en;q=0.9",
+        "accept-encoding": "gzip, deflate, br, zstd",
+        "referer": "http://localhost:3000/graphql",
+        "content-type": "application/json",
+        "content-length": "2060",
+        "origin": "http://localhost:3000",
+        "sec-gpc": "1",
+        "connection": "keep-alive",
+        "cookie": "cw_conversation=eyJhbGciOiJIUzI1NiJ9.eyJzb3VyY2VfaWQiOiJkM2I2NzAwYS0wNzczLTQ0NjgtYmU1Zi00N2FmZWNkMjM1ZTkiLCJpbmJveF9pZCI6OSwiZXhwIjoxODAzMzU5Mjc1LCJpYXQiOjE3ODc4MDcyNzV9.TgPViQNRCVVf16ZYtvO0HC8-4wj4WOq8IjZj9-HKy88; lang=ru; pma_lang=en; auth.strategy=local; phpMyAdmin=53082bb499c9b776f0253de374f30497",
+        "sec-fetch-dest": "empty",
+        "sec-fetch-mode": "cors",
+        "sec-fetch-site": "same-origin",
+        "priority": "u=4"
+      },
+      "remoteAddress": "::ffff:127.0.0.1",
+      "remotePort": 56376
+    }
+    [35mres[39m: {
+      "statusCode": 200,
+      "headers": {
+        "x-powered-by": "Express",
+        "access-control-allow-origin": "*",
+        "cache-control": "no-store",
+        "content-type": "application/json; charset=utf-8",
+        "content-length": "27920",
+        "etag": "W/\"6d10-HxfQFFFh3bvHwGWkCcwbLpBXYLU\""
+      }
+    }
+    [35mresponseTime[39m: 40
+Query: select "holder_address", "balance", "updated_at_block" from "balances" where ("balances"."token_address" = $1 and "balances"."balance" > $2) order by "balances"."balance" desc, "balances"."holder_address" asc limit $3 -- params: ["0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48", "0", 100]
+Query: select count(*) from "balances" where ("balances"."token_address" = $1 and "balances"."balance" > $2) -- params: ["0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48", "0"]
+Query: 
+  WITH matched AS (
+    SELECT transfers.*, transfers.from_address AS holder
+    FROM transfers
+    WHERE transfers.token_address = $1 AND "transfers"."from_address" in ($2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22, $23, $24, $25, $26, $27, $28, $29, $30, $31, $32, $33, $34, $35, $36, $37, $38, $39, $40, $41, $42, $43, $44, $45, $46, $47, $48, $49, $50, $51, $52, $53, $54, $55, $56, $57, $58, $59, $60, $61, $62, $63, $64, $65, $66, $67, $68, $69, $70, $71, $72, $73, $74, $75, $76, $77, $78, $79, $80, $81, $82, $83, $84, $85, $86, $87, $88, $89, $90, $91, $92, $93, $94, $95, $96, $97, $98, $99, $100, $101)
+
+    UNION ALL
+
+    SELECT transfers.*, transfers.to_address AS holder
+    FROM transfers
+    WHERE transfers.token_address = $102 AND "transfers"."to_address" in ($103, $104, $105, $106, $107, $108, $109, $110, $111, $112, $113, $114, $115, $116, $117, $118, $119, $120, $121, $122, $123, $124, $125, $126, $127, $128, $129, $130, $131, $132, $133, $134, $135, $136, $137, $138, $139, $140, $141, $142, $143, $144, $145, $146, $147, $148, $149, $150, $151, $152, $153, $154, $155, $156, $157, $158, $159, $160, $161, $162, $163, $164, $165, $166, $167, $168, $169, $170, $171, $172, $173, $174, $175, $176, $177, $178, $179, $180, $181, $182, $183, $184, $185, $186, $187, $188, $189, $190, $191, $192, $193, $194, $195, $196, $197, $198, $199, $200, $201, $202)
+  ),
+  ranked AS (
+    SELECT *,
+      ROW_NUMBER() OVER (
+        PARTITION BY holder
+        ORDER BY block_number DESC, log_index DESC
+      ) AS rn
+    FROM matched
+  )
+  SELECT * FROM ranked WHERE rn <= $203
+   -- params: ["0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48", "0xee7ae85f2fe2239e27d9c1e23fffe168d63b4055", "0xf89d7b9c864f589bbf53a82105107622b35eaa40", "0x2744dfd9898f0babbc570cc594bbbc84b487a22b", "0x61e614ec5e2f282ca42f313afacb45738ddacdae", "0x445f16314284b43dfa1fd3cd77b9dea4a1bebd97", "0xa850693f4366fd429b775b031919d5d3077a4ed3", "0x4d38769e5a15513b6312895a5ce17f0797a59160", "0xfa84c839dab6d2e5ceb01d804d1e88514b2944ea", "0xfcbd2260b4a792d27a2fa3d40ac3b2cd3128bfe8", "0x549d835356d92983abb76e4cae639f7857963425", "0x2d610e4eceac64e46226b70613b6d7f81e719bc2", "0x46340b20830761efd32832a74d7169b29feb9758", "0x879d8aa88c4e4baaf4c7da0f7290e2c483bcaa51", "0xafa1b5c1b14aeccbaf6e66aa6baca9f59a80c7b8", "0xbbbbbbbbbb9cc5e90e3b3af64bdaf62c37eeffcb", "0x8df175aba312ce90aa03f636573ca99c29fbb9d0", "0x9dd1929124a9ad8d1bc7f029eebbbfeb0d898318", "0x60841137b1ddc612e6ea4f5b358c91ba6159d529", "0x260b364fe0d3d37e6fd3cda0fa50926a06c54cea", "0x100ae042ef0ea159ecc3513e9a378ff21f3829ba", "0xdf5cab3b5a9dbe6bef4e048f8df04cca7dd69d4b", "0x5ad1c5c93de379bf53d5a86c66248e6dc2a7cd11", "0x1dfc6bec8499fcb5e3151c7c6d27feb9d7eae1d4", "0xf6abd6ed629bf855531455ced15362080879f5d0", "0x06ce998204bab5796b4614fcb33ee83b8a9d0021", "0xb43c4d203cb679a4a70bef6d82c8b1aadc68a5a0", "0xd178a90c41ff3dcffbfdef7de0baf76cbfe6a121", "0x152a29aefe3339c7f0bbf62d9091ec8b3fc5197f", "0x1d69bab1b4659dad5e6d12a265703a2189defb68", "0x05cdb1526f6e224e02919a4c018d9784ea25eb3d", "0xcd531ae9efcce479654c4926dec5f6209531ca7b", "0x093272c07700d3ca5301c3bf9b3a392624179e2f", "0x7c3867db6bebb0e94e60dc6c4fa7a585332a7df8", "0x82d47ff615d05b7fbafb4fff67bd8aef235b68bb", "0xc7125da07a7110049ecc68f43bf10de4d45ca84e", "0x37e773558f127e782fdf5e4189ba28d67f72d046", "0x8b4ec26384bf34b9a81d412a40913dcb107038b8", "0x11d863b98d882e16be4ba5075e5bd8ffaac6805e", "0xf6281cbc5de7d6859d5aad5a0c6614ea49f66d78", "0x9cbdbd7fa768ad6e9546ff57238722fa9b925329", "0xe9ec5a5fa466ac46cb28a9c556a72d9aab0a892a", "0x303a38b46595b93e08d05bbdafd5956910e3d3e3", "0x71f04b4c550b2741c6a25ecb205b2dcb5743654b", "0x446ed7a8f70011db648451c668317e9c7390a7d8", "0xdbcc96bcada067864902aad14e029fe7c422f147", "0x8b820fe67e8367d322d0c1bfc809cd9fe478df52", "0x6a577f644b9e7181671615c0bd237d975c41ead2", "0x2a500f79c651759f12e67fedb7748ef2449590cf", "0x9151f5c7a37968d8ca8176c0647073dfe77bd918", "0x089a7aed565ddefac8a30f416b2d2877860723e5", "0x864e2c04de640d015b33bb4e3092b3cd89ea55ed", "0xa01aa2196724a39290f465b3925e5dcafe7f2256", "0xf60dc2b5079abde7d4cc0cc1920f184dc9dc4907", "0x195f5cefe3bd5fd0daa4fbda99f7f38bf7ae0c39", "0x66e092fd00c4e4eb5bd20f5392c1902d738ae7bc", "0xa2a3d7a66bb8b26986c85f0275342cda02ff5e24", "0xd8bf5ceaae0876adef2cd3034990f6ce48fbfb85", "0xc9f5296eb3ac266c94568d790b6e91eba7d76a11", "0x4333047ce25588740243b08aa3c4fd774212007e", "0xebf6c883a1d60ab38c8ed4780aadbfe4c805ed4f", "0xb8ba36e591facee901ffd3d5d82df491551ad7ef", "0x58b704065b7aff3ed351052f8560019e05925023", "0x8e87caf1fc5a0d4aebe0e0c976b24a3a9e3672c4", "0x5b3cbd7397cfc5b97041efd85a98698d554f3a49", "0x1ab4973a48dc892cd9971ece8e01dcc7688f8f23", "0xb0de2dd8137851c2e39d21efaf50d20c27019f8e", "0x2b52e60c844d7946b6d910d3296940dc889cc785", "0x264ca005239057811ec0abbb73b340528982ca9c", "0x29065a4c1f2f20d1e263930088890d6f49fe715a", "0x51c72848c68a965f66fa7a88855f9f7784502a7f", "0x325e13acb8768a3da01fceb216c196b96750fd6a", "0x58edf78281334335effa23101bbe3371b6a36a51", "0xc010862311a9e1debc9732f18f952c8fedd59109", "0x6872b6630a3afcd3117191a8403c2002e13df7de", "0x32f5ab7860d5101fd45d2c3a8a126a6000212d0f", "0x41e14b91bb6162ec1248d9b4571b347093211818", "0xa0f2e2f7b3ab58e3e52b74f08d94ae52778d46df", "0x00537419a4a4d4ffd5742a33d75e9ced65aeab1b", "0x9b0be4ffa4db75832aade5d3ad2d33ffbc5c739d", "0x6448dbc9e99be98109c858c6624410c8f494346b", "0xc8ecc95c900f02eb78315acb1f3b2ad6a77932c6", "0x4c857f198eaf6ca9e05c686f90cef0fe14600232", "0xf7b52be96b229dc63e6301bea175a1b5f756c274", "0x88381df602513f7f95439e24ad4ac2b6a2db1acc", "0xd38bfcef2e6c6ffd025fae3491a6fc285d64aace", "0x743f3abe366e973801ac629892deb0a6555500aa", "0x0ee8a8e7e04b8e3e8c044f97f736b1554849e904", "0xac9ebcbfbbdc6c814e49526e0b56d867c91fed8b", "0xfbfb9b2b87e4a8b14545da0e85f202b33fc521c4", "0xdb92e6eddfbe56ea158b32de3e4b8947216cc437", "0xe01c425ca2f6c48306548ba1c931ff9eeb331fab", "0xe5c239a1f2b02754bc87f7607a78adbacc0fb58c", "0xa27086bf9068021ea50ffe8528ae08b500251aee", "0xb501002e95213bc739bb753edd812cfd0bd36932", "0x36da0bfe6e0cb2d84ee84b1d832e5b1693b76448", "0xd08f36a7d220bbc71917bc841708b4e4e5f4d085", "0xb0543c112c3958ff3423fde0688ed3ac1dd53b99", "0x95dbb3c7546f22bce375900abfdd64a4e5bd73d6", "0x5b92e431f93024ea3ec20b311d83ac6035bd50e1", "0x41fbb20867129f3b81db0db44982b4ba7e8980db", "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48", "0xee7ae85f2fe2239e27d9c1e23fffe168d63b4055", "0xf89d7b9c864f589bbf53a82105107622b35eaa40", "0x2744dfd9898f0babbc570cc594bbbc84b487a22b", "0x61e614ec5e2f282ca42f313afacb45738ddacdae", "0x445f16314284b43dfa1fd3cd77b9dea4a1bebd97", "0xa850693f4366fd429b775b031919d5d3077a4ed3", "0x4d38769e5a15513b6312895a5ce17f0797a59160", "0xfa84c839dab6d2e5ceb01d804d1e88514b2944ea", "0xfcbd2260b4a792d27a2fa3d40ac3b2cd3128bfe8", "0x549d835356d92983abb76e4cae639f7857963425", "0x2d610e4eceac64e46226b70613b6d7f81e719bc2", "0x46340b20830761efd32832a74d7169b29feb9758", "0x879d8aa88c4e4baaf4c7da0f7290e2c483bcaa51", "0xafa1b5c1b14aeccbaf6e66aa6baca9f59a80c7b8", "0xbbbbbbbbbb9cc5e90e3b3af64bdaf62c37eeffcb", "0x8df175aba312ce90aa03f636573ca99c29fbb9d0", "0x9dd1929124a9ad8d1bc7f029eebbbfeb0d898318", "0x60841137b1ddc612e6ea4f5b358c91ba6159d529", "0x260b364fe0d3d37e6fd3cda0fa50926a06c54cea", "0x100ae042ef0ea159ecc3513e9a378ff21f3829ba", "0xdf5cab3b5a9dbe6bef4e048f8df04cca7dd69d4b", "0x5ad1c5c93de379bf53d5a86c66248e6dc2a7cd11", "0x1dfc6bec8499fcb5e3151c7c6d27feb9d7eae1d4", "0xf6abd6ed629bf855531455ced15362080879f5d0", "0x06ce998204bab5796b4614fcb33ee83b8a9d0021", "0xb43c4d203cb679a4a70bef6d82c8b1aadc68a5a0", "0xd178a90c41ff3dcffbfdef7de0baf76cbfe6a121", "0x152a29aefe3339c7f0bbf62d9091ec8b3fc5197f", "0x1d69bab1b4659dad5e6d12a265703a2189defb68", "0x05cdb1526f6e224e02919a4c018d9784ea25eb3d", "0xcd531ae9efcce479654c4926dec5f6209531ca7b", "0x093272c07700d3ca5301c3bf9b3a392624179e2f", "0x7c3867db6bebb0e94e60dc6c4fa7a585332a7df8", "0x82d47ff615d05b7fbafb4fff67bd8aef235b68bb", "0xc7125da07a7110049ecc68f43bf10de4d45ca84e", "0x37e773558f127e782fdf5e4189ba28d67f72d046", "0x8b4ec26384bf34b9a81d412a40913dcb107038b8", "0x11d863b98d882e16be4ba5075e5bd8ffaac6805e", "0xf6281cbc5de7d6859d5aad5a0c6614ea49f66d78", "0x9cbdbd7fa768ad6e9546ff57238722fa9b925329", "0xe9ec5a5fa466ac46cb28a9c556a72d9aab0a892a", "0x303a38b46595b93e08d05bbdafd5956910e3d3e3", "0x71f04b4c550b2741c6a25ecb205b2dcb5743654b", "0x446ed7a8f70011db648451c668317e9c7390a7d8", "0xdbcc96bcada067864902aad14e029fe7c422f147", "0x8b820fe67e8367d322d0c1bfc809cd9fe478df52", "0x6a577f644b9e7181671615c0bd237d975c41ead2", "0x2a500f79c651759f12e67fedb7748ef2449590cf", "0x9151f5c7a37968d8ca8176c0647073dfe77bd918", "0x089a7aed565ddefac8a30f416b2d2877860723e5", "0x864e2c04de640d015b33bb4e3092b3cd89ea55ed", "0xa01aa2196724a39290f465b3925e5dcafe7f2256", "0xf60dc2b5079abde7d4cc0cc1920f184dc9dc4907", "0x195f5cefe3bd5fd0daa4fbda99f7f38bf7ae0c39", "0x66e092fd00c4e4eb5bd20f5392c1902d738ae7bc", "0xa2a3d7a66bb8b26986c85f0275342cda02ff5e24", "0xd8bf5ceaae0876adef2cd3034990f6ce48fbfb85", "0xc9f5296eb3ac266c94568d790b6e91eba7d76a11", "0x4333047ce25588740243b08aa3c4fd774212007e", "0xebf6c883a1d60ab38c8ed4780aadbfe4c805ed4f", "0xb8ba36e591facee901ffd3d5d82df491551ad7ef", "0x58b704065b7aff3ed351052f8560019e05925023", "0x8e87caf1fc5a0d4aebe0e0c976b24a3a9e3672c4", "0x5b3cbd7397cfc5b97041efd85a98698d554f3a49", "0x1ab4973a48dc892cd9971ece8e01dcc7688f8f23", "0xb0de2dd8137851c2e39d21efaf50d20c27019f8e", "0x2b52e60c844d7946b6d910d3296940dc889cc785", "0x264ca005239057811ec0abbb73b340528982ca9c", "0x29065a4c1f2f20d1e263930088890d6f49fe715a", "0x51c72848c68a965f66fa7a88855f9f7784502a7f", "0x325e13acb8768a3da01fceb216c196b96750fd6a", "0x58edf78281334335effa23101bbe3371b6a36a51", "0xc010862311a9e1debc9732f18f952c8fedd59109", "0x6872b6630a3afcd3117191a8403c2002e13df7de", "0x32f5ab7860d5101fd45d2c3a8a126a6000212d0f", "0x41e14b91bb6162ec1248d9b4571b347093211818", "0xa0f2e2f7b3ab58e3e52b74f08d94ae52778d46df", "0x00537419a4a4d4ffd5742a33d75e9ced65aeab1b", "0x9b0be4ffa4db75832aade5d3ad2d33ffbc5c739d", "0x6448dbc9e99be98109c858c6624410c8f494346b", "0xc8ecc95c900f02eb78315acb1f3b2ad6a77932c6", "0x4c857f198eaf6ca9e05c686f90cef0fe14600232", "0xf7b52be96b229dc63e6301bea175a1b5f756c274", "0x88381df602513f7f95439e24ad4ac2b6a2db1acc", "0xd38bfcef2e6c6ffd025fae3491a6fc285d64aace", "0x743f3abe366e973801ac629892deb0a6555500aa", "0x0ee8a8e7e04b8e3e8c044f97f736b1554849e904", "0xac9ebcbfbbdc6c814e49526e0b56d867c91fed8b", "0xfbfb9b2b87e4a8b14545da0e85f202b33fc521c4", "0xdb92e6eddfbe56ea158b32de3e4b8947216cc437", "0xe01c425ca2f6c48306548ba1c931ff9eeb331fab", "0xe5c239a1f2b02754bc87f7607a78adbacc0fb58c", "0xa27086bf9068021ea50ffe8528ae08b500251aee", "0xb501002e95213bc739bb753edd812cfd0bd36932", "0x36da0bfe6e0cb2d84ee84b1d832e5b1693b76448", "0xd08f36a7d220bbc71917bc841708b4e4e5f4d085", "0xb0543c112c3958ff3423fde0688ed3ac1dd53b99", "0x95dbb3c7546f22bce375900abfdd64a4e5bd73d6", "0x5b92e431f93024ea3ec20b311d83ac6035bd50e1", "0x41fbb20867129f3b81db0db44982b4ba7e8980db", 100]
+[2026-08-31 22:07:27.162 +0800] [32mINFO[39m: [36mPOST / - success (200)[39m
+    [35mreq[39m: {
+      "id": 4,
+      "method": "POST",
+      "url": "/graphql",
+      "query": {},
+      "params": {},
+      "headers": {
+        "host": "localhost:3000",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64; rv:154.0) Gecko/20100101 Firefox/154.0",
+        "accept": "*/*",
+        "accept-language": "en-US,en;q=0.9",
+        "accept-encoding": "gzip, deflate, br, zstd",
+        "referer": "http://localhost:3000/graphql",
+        "content-type": "application/json",
+        "content-length": "427",
+        "origin": "http://localhost:3000",
+        "sec-gpc": "1",
+        "connection": "keep-alive",
+        "cookie": "cw_conversation=eyJhbGciOiJIUzI1NiJ9.eyJzb3VyY2VfaWQiOiJkM2I2NzAwYS0wNzczLTQ0NjgtYmU1Zi00N2FmZWNkMjM1ZTkiLCJpbmJveF9pZCI6OSwiZXhwIjoxODAzMzU5Mjc1LCJpYXQiOjE3ODc4MDcyNzV9.TgPViQNRCVVf16ZYtvO0HC8-4wj4WOq8IjZj9-HKy88; lang=ru; pma_lang=en; auth.strategy=local; phpMyAdmin=53082bb499c9b776f0253de374f30497",
+        "sec-fetch-dest": "empty",
+        "sec-fetch-mode": "cors",
+        "sec-fetch-site": "same-origin",
+        "priority": "u=4"
+      },
+      "remoteAddress": "::ffff:127.0.0.1",
+      "remotePort": 35934
+    }
+    [35mres[39m: {
+      "statusCode": 200,
+      "headers": {
+        "x-powered-by": "Express",
+        "access-control-allow-origin": "*",
+        "cache-control": "no-store",
+        "content-type": "application/json; charset=utf-8",
+        "content-length": "12609",
+        "etag": "W/\"3141-SYOURHq7v6tor8NFkwQ3OlcqxUs\""
+      }
+    }
+    [35mresponseTime[39m: 714
