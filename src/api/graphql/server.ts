@@ -9,12 +9,35 @@ import type http from 'http';
 import type DataLoader from 'dataloader';
 import { type Transfer } from '../../services/transfers';
 import { makeTransfersByHolderLoader } from './loaders';
+import { unwrapResolverError } from '@apollo/server/errors';
+import { HttpError } from '../lib/http-error';
+import logger from '../lib/logger';
 
 export async function mountGraphql(app: Express, httpServer: http.Server) {
   const server = new ApolloServer({
     typeDefs,
     resolvers,
     plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
+    formatError: (formattedError, error) => {
+      const original = unwrapResolverError(error);
+
+      if (original instanceof HttpError) {
+        return {
+          message: original.message,
+          locations: formattedError.locations,
+          path: formattedError.path,
+          extensions: { code: original.code.toUpperCase() },
+        };
+      }
+
+      logger.error({ err: original }, 'graphql internal server error');
+      return {
+        message: 'internal server error',
+        locations: formattedError.locations,
+        path: formattedError.path,
+        extensions: { code: 'INTERNAL_SERVER_ERROR' },
+      };
+    },
   });
   await server.start();
 
