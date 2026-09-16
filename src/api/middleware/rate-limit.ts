@@ -7,7 +7,7 @@ export const apiLimiter = rateLimit({
   limit: 100,
   standardHeaders: 'draft-8',
   legacyHeaders: false,
-  handler: (req: Request, res: Response, next: NextFunction) => {
+  handler: (_req: Request, _res: Response, next: NextFunction) => {
     next(new TooManyRequestsError());
   },
 });

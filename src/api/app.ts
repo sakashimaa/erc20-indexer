@@ -16,14 +16,14 @@ app.use(express.json());
 app.use(
   pinoHttp({
     logger: appLogger,
-    customLogLevel: (req, res, err) => {
+    customLogLevel: (_, res, err) => {
       if (res.statusCode >= 500 || err) return 'error';
       if (res.statusCode >= 400) return 'warn';
       return 'info';
     },
     customSuccessMessage: (req, res) =>
       `${req.method} ${req.url} - success (${res.statusCode})`,
-    customErrorMessage: (req, res, err) =>
+    customErrorMessage: (req, _, err) =>
       `${req.method} ${req.url} - Failed: ${err?.message}`,
   }),
 );
@@ -31,7 +31,7 @@ app.use(
 const apiRouter = Router();
 const v1Router = Router();
 
-v1Router.get('/health', (req: Request, res: Response) => res.json({ status: 'ok' }));
+v1Router.get('/health', (_: Request, res: Response) => res.json({ status: 'ok' }));
 
 app.use('/api', apiRouter);
 apiRouter.use('/v1', v1Router);

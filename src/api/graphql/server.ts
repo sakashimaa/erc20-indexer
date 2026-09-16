@@ -12,11 +12,13 @@ import { makeTransfersByHolderLoader } from './loaders';
 import { unwrapResolverError } from '@apollo/server/errors';
 import { HttpError } from '../lib/http-error';
 import logger from '../lib/logger';
+import depthLimit from 'graphql-depth-limit';
 
 export async function mountGraphql(app: Express, httpServer: http.Server) {
   const server = new ApolloServer({
     typeDefs,
     resolvers,
+    validationRules: [depthLimit(6)],
     plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
     formatError: (formattedError, error) => {
       const original = unwrapResolverError(error);
